@@ -136,7 +136,17 @@ PRM（Process Reward Model）需要标注数据训练一个独立打分模型，
 
 PBRS 实验经历了一场数值稳定性的炼狱。v1 版搜索行为正常（depth 1.1→2.0），但因磁盘满崩溃。v2 续训后 grad_norm/kl 全 NaN——forward 阶段 logits 中每步稳定出现 ~100 个 NaN（vocab_size=151936 的张量中占比 0.000006%），但经 backward 传播后扩散到全部 2900 万梯度元素。
 
-最终 v6 稳定版的修复链展示了 LoRA + RL 场景下数值稳定性的工程复杂度：Adam eps 从 1e-8 提升到 1e-4（默认值在 fp16 下除法溢出）、fp32 upcast + clamp(-1e4, 1e4) + nan_to_num 应用于 logits、autocast(enabled=False) 在 entropy/log_prob 计算时禁用混合精度、entropy_from_logits 中 torch.where(isfinite) 处理 -inf、advantage clipping [-5, 5]（Exp-01 的产出）。
+最终 v6 稳定版的修复不是某一招解决的，而是一套从 reward signal → advantage estimation → gradient computation → parameter update → post-update check 的全链路稳定性工程，五层防护逐层叠加：
+
+**第一层：Advantage Clamp [-5, 5]。** 直接 patch 进服务器上 `core_algos.py` 的 DrGRPO advantage 计算后面。原始 DrGRPO 只做 divide-by-std 归一化，但 web search agent 场景下 reward 跨度极大——成功搜索到答案 +1，完全失败 -1，PBRS 中间奖励更丰富但仍有极端值。日志验证了效果的悬殊：baseline（03a）的 advantage 范围是 [-1000000, +500000]，完全无界；v6 版本的 advantage 稳定在 [-5, +2.6]，被 clamp 有效约束。这一招来自 Exp-01 的经验（见第三章）。
+
+**第二层：LoRA 本身的参数规模约束。** 全参数训练（03a）grad_norm 动辄上万，LoRA (rank=64) 只更新低秩矩阵，可训练参数量少 2-3 个数量级，天然限制了梯度的量级。这不是"优化"而是结构性约束——相当于把搜索空间从 3B 参数的高维流形压缩到了一个 ~50MB 的低秩子空间。
+
+**第三层：fp32 upcast + clamp(-1e4, 1e4) + nan_to_num。** 在 `dp_actor.py` 中对 logits 的处理。bf16 下 Adam 更新写回参数时可能溢出（bf16 max ~65504），所以在 forward 时先把 logits 转 fp32 并 clamp，防止 NaN 产生。配合 autocast(enabled=False) 在 entropy/log_prob 计算时禁用混合精度、entropy_from_logits 中 torch.where(isfinite) 处理 -inf。
+
+**第四层：Post-optimizer NaN 修复。** `fix_optimizer_nan_v3.py` 注入的逻辑——如果某个位置还是产生了 NaN，只修复那个位置（从 backup 恢复），不回滚整个参数，同时对所有 LoRA 参数做 clamp(-10, 10) 防止逐步漂移。这是最后的兜底，保证即使前三层偶尔漏过异常值也不会扩散。
+
+**第五层：entropy_coeff=0.01 + kl_loss_coef=0.005。** 比 baseline 分别高 10x 和 5x 的正则化强度。更强的 entropy bonus 防止策略过早坍缩到单一模式，KL 惩罚防止策略偏离 ref model 太远。两者功能正交——entropy 管"分布有多集中"，KL 管"离初始策略多远"。
 
 v6 版本的效果：
 
@@ -144,10 +154,13 @@ v6 版本的效果：
 |------|-------------|-------------|
 | pg_loss | 正常但无改善 | 0.4 ~ 2.2 |
 | grad_norm | 2608 ~ 23048 | **0.014 ~ 0.057** |
+| advantages 范围 | [-1000000, +500000] | **[-5.0, +2.6]** |
 | search_depth | 1.0-1.6 | **1.6-2.5** |
 | NaN | 无 | 无（v6 修复后） |
 
-grad_norm 从万级降到百分之一级——下降 5 个数量级。本质原因是 PBRS 把原来只挂在最后一个 token 的信号分散到了中间位置，等价于降低了 credit assignment 的方差。Score 未明显改善的根因是搜索环境质量而非算法失效：info_gain ≈ 0 说明即使模型学会了搜索行为，搜索返回的内容和答案无关。PBRS 是 reward 的"放大器"而非"创造者"——它依赖搜索环境能返回有效信息。
+grad_norm 从万级降到百分之一级——下降 5 个数量级。这个结果是五层防护联合作用的产物：advantage clamp 约束了信号源头的尺度，LoRA 限制了可更新参数的量级，fp32 upcast 堵住了数值溢出的路径，post-optimizer check 兜住了漏网之鱼，强正则化阻止了策略极端偏移。单独拆掉任何一层都会导致不同形式的失败——这正是"数值炼狱"经历六个版本才稳定下来的原因。
+
+Score 未明显改善的根因是搜索环境质量而非算法失效：info_gain ≈ 0 说明即使模型学会了搜索行为，搜索返回的内容和答案无关。PBRS 是 reward 的"放大器"而非"创造者"——它依赖搜索环境能返回有效信息。
 
 ---
 
