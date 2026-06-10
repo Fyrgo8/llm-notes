@@ -16,6 +16,8 @@
 | P1 | 06-推理优化.md | Prefill/Decode、PagedAttention/vLLM、投机解码、量化 |
 | P2 | 07-模型架构与设计选择.md | Decoder-only 原因、Causal vs Prefix LM、Scaling Law、涌现、激活函数、LLaMA 设计、MoE、长上下文 |
 | P2 | 08-Agent与RAG.md | Agent 架构、Function Calling、RAG 流程与 RAG vs 微调、幻觉分类与缓解、CoT 深入分析 |
+| P1 | 09-数据工程.md | 预训练数据处理流水线、去重（MinHash/SimHash）、质量过滤、SFT 数据构造（Self-Instruct/Evol-Instruct）、偏好数据（RLAIF/Constitutional AI）、数据配比（DoReMi）、分词（BPE/WordPiece/Byte-level BPE） |
+| P1 | 10-评估体系.md | Benchmark 体系（MMLU/GSM8K/HumanEval）、评估方法论（Perplexity/Pass@k/Few-shot vs Zero-shot）、数据污染检测、LLM-as-Judge 偏见与实践、Arena 评估 |
 
 ### 使用建议
 
