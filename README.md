@@ -6,9 +6,24 @@
 
 ## 目录
 
+### 面试核心高频问题
+
+从原始八股 10 章中提取的高频考点精华，按面试实际考察频率分为 P0/P1/P2 三层，叙事驱动、公式保留、量化数据支撑结论。
+
+| 优先级 | 文件 | 主题 |
+|--------|------|------|
+| P0 | [Transformer 与 Attention](面试核心高频问题/01-Transformer与Attention.md) | Attention 机制、MHA/MQA/GQA、Flash Attention、KV Cache、Q/K/V 必要性、训练推理差异、Normalization 对比 |
+| P0 | [位置编码与长度外推](面试核心高频问题/02-位置编码与长度外推.md) | RoPE 推导、ALiBi、NTK/YaRN 外推 |
+| P0 | [强化学习与对齐](面试核心高频问题/03-强化学习与对齐.md) | RLHF 三阶段、PPO、DPO、GRPO、Reward Hacking |
+| P1 | [参数高效微调](面试核心高频问题/04-参数高效微调.md) | LoRA/QLoRA/AdaLoRA、PEFT 体系全景、SFT 工程实践、灾难性遗忘 |
+| P1 | [分布式训练](面试核心高频问题/05-分布式训练.md) | ZeRO、张量并行、流水线并行、3D 并行 |
+| P1 | [推理优化](面试核心高频问题/06-推理优化.md) | Prefill/Decode、PagedAttention/vLLM、投机解码、量化 |
+| P2 | [模型架构与设计选择](面试核心高频问题/07-模型架构与设计选择.md) | Decoder-only 原因、Causal vs Prefix LM、Scaling Law、涌现、激活函数、LLaMA 设计、MoE、长上下文 |
+| P2 | [Agent 与 RAG](面试核心高频问题/08-Agent与RAG.md) | Agent 架构、Function Calling、RAG 流程与 RAG vs 微调、幻觉分类与缓解、CoT 深入分析 |
+
 ### 大模型算法八股
 
-系统性整理的大模型面试知识体系，覆盖从基础到应用的完整链路：
+系统性整理的大模型面试知识体系，覆盖从基础到应用的完整链路（原始详细版）：
 
 - [01.大语言模型基础](大模型算法八股/01.大语言模型基础/) — 语言模型、分词、词向量、深度学习基础
 - [02.大语言模型架构](大模型算法八股/02.大语言模型架构/) — Transformer、注意力机制、BERT、LLaMA、MoE
