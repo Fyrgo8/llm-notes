@@ -1,0 +1,11 @@
+{
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "08 Attachments",
+  "newFileFolderPath": "00 Inbox",
+  "newLinkFormat": "relative",
+  "promptDelete": false,
+  "showInlineTitle": true,
+  "useMarkdownLinks": false,
+  "readableLineLength": true,
+  "showPropertiesInDocument": "visible"
+}

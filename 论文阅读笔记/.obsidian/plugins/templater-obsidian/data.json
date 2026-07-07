@@ -1,0 +1,23 @@
+{
+  "folder": "07 Templates",
+  "timeout": 5,
+  "enabled_templates_hotkeys": [],
+  "startup_templates": [],
+  "auto_jump_to_cursor": true,
+  "enable_system_commands": false,
+  "shell_path": "",
+  "user_scripts_folder": "07 Templates/scripts",
+  "trigger_on_file_creation": false,
+  "auto_rename_file": false,
+  "file_templates": [
+    {
+      "regex": ".*02 Papers.*",
+      "template": "07 Templates/Paper Note Template"
+    },
+    {
+      "regex": ".*03 Topics.*",
+      "template": "07 Templates/Topic Note Template"
+    }
+  ],
+  "syntax_highlighting": true
+}

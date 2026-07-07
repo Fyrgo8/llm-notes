@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "entries": {
+    "ac233fcf": {
+      "hash": "ac233fcf",
+      "content": [
+        {
+          "type": "text",
+          "text": "```02 Papers/ET-Agent_2601.06860_论文笔记.md\n13|只盯着最终答案是否正确，于是会\n```\n\n\nET-Agent_2601.06860_论文笔记.md (14 字符)1 \n\n"
+        }
+      ],
+      "createdAt": 1783275421646,
+      "updatedAt": 1783275421646
+    },
+    "79f6a195": {
+      "hash": "79f6a195",
+      "content": [
+        {
+          "type": "text",
+          "text": "```02 Papers/EnvScaler论文精读.md\n60|`reward 设计`\n61|  - 核心改动在这里。reward 不来自偏好模型，也不来自人工 RM，而是来自自动生成的 rule-based check function。\n```\n\n\nEnvScaler论文精读.md (38 词/字) 这是啥意思\n\n"
+        }
+      ],
+      "createdAt": 1783422840137,
+      "updatedAt": 1783422840137
+    },
+    "6993f5c4": {
+      "hash": "6993f5c4",
+      "content": [
+        {
+          "type": "text",
+          "text": "```02 Papers/EnvScaler论文精读.md\n75|环境生成、任务生成、检查函数生成\n```\n\n\nEnvScaler论文精读.md (14 字符) 在rl的语境中主要指奖励函数的设计吧?\n\n"
+        }
+      ],
+      "createdAt": 1783424268761,
+      "updatedAt": 1783424268761
+    },
+    "48f864d2": {
+      "hash": "48f864d2",
+      "content": [
+        {
+          "type": "text",
+          "text": "```02 Papers/EnvScaler论文精读.md\n29| 真实环境太贵：真网站、真 API、真软件难并发、难复现、会变，还可能有安全问题。\n30|- LLM 模拟环境不可靠：observation、state transition、reward 都可能是模型编的，训练信号不稳。\n31|- 手工写 sandbox 不可扩展：能手写几个 demo 环境，但很难手写上百个跨领域、带状态、可自动判分的环境。\n```\n\n\nEnvScaler论文精读.md (94 词/字)举个例子解释一下 \n\n"
+        }
+      ],
+      "createdAt": 1783424320536,
+      "updatedAt": 1783424320536
+    }
+  }
+}

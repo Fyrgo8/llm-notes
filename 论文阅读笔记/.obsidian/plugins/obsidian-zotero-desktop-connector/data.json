@@ -1,0 +1,9 @@
+{
+  "citeFormat": "[[@{{citekey}}]]",
+  "literatureNoteFolder": "02 Papers",
+  "attachmentFolder": "08 Attachments",
+  "notesFolder": "09 Excerpts",
+  "importImages": true,
+  "importNotes": true,
+  "openNoteAfterImport": true
+}
