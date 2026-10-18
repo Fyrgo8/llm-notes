@@ -1,0 +1,27 @@
+# 系统与工具
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Obsidian 本地状态（保留共享配置，忽略个人状态与插件二进制）
+.obsidian/workspace*.json
+.obsidian/plugins/
+.obsidian/cache/
+.trash/
+
+# AI 插件本地数据
+**/.yolo_json_db/
+
+# 安装包与压缩包
+*.xpi
+*.zip
+*.7z
+
+# 临时文件
+~$*
+*.tmp
